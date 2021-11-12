@@ -15,7 +15,7 @@ pkgdesc="S2 is primarily designed to work with spherical geometry,"
 arch=('x86_64' 'aarch64')
 url="https://$_host/$_project/$_gitname#branch=$_branch"
 license=('Apache-2.0 License')
-depends=('qt5-base' 'abseil-cpp')
+depends=('qt5-base' 'abseil-cpp' 'openssl' 'gtest')
 makedepends=('git' 'cmake')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
@@ -34,7 +34,9 @@ build() {
     cmake \
         -B "${pkgname}/build" \
         -S "${pkgname}" \
-        -DCMAKE_INSTALL_PREFIX:PATH='/usr'
+        -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
+        -DCMAKE_VERBOSE_MAKEFILE=ON -DBUILD_PYTHON=OFF -DBUILD_TESTING=OFF \
+        -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF
     make -C "${pkgname}/build" all
 }
 
