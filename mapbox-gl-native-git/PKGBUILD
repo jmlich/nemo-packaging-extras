@@ -5,22 +5,26 @@ _project=mapbox
 _basename=mapbox-gl-native
 _branch=master
 
+_gittag=maps-v1.6.0
 _gitname=$_basename
 pkgname=$_basename-git
 
-pkgver=maps.v1.6.0.r16.gcf734a2fec
+pkgver=maps.v1.6.0.r0.gd60fd302b1
 
 pkgrel=1
 pkgdesc="Mapbox GL Native Qt version"
 arch=('x86_64' 'aarch64')
-url="https://$_host/$_project/$_gitname#branch=$_branch"
+#url="https://$_host/$_project/$_gitname#branch=$_branch"
+url="https://$_host/$_project/$_gitname#tag=${_gittag}"
 license=('2-Clause BSD license')
 depends=('qt5-base' 'sqlite' 'zlib' 'curl' 'icu' )
 makedepends=('git' 'cmake')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
-source=("${pkgname}::git+${url}")
-sha256sums=('SKIP')
+source=("${pkgname}::git+${url}"
+    '0001-add-include.patch'
+)
+sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${pkgname}"
@@ -33,6 +37,8 @@ pkgver() {
 prepare() {
     cd "$srcdir/${pkgname}"
     git submodule update --init --recursive
+
+    patch -p1 --input="${srcdir}/0001-add-include.patch"
 }
 
 build() {
@@ -40,7 +46,9 @@ build() {
         -B "${pkgname}/build" \
         -S "${pkgname}" \
         -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
-        -DMBGL_WITH_QT=ON -DMBGL_WITH_WERROR=OFF -DMBGL_WITH_QT_HEADLESS=OFF -DMBGL_WITH_QT_LIB_ONLY=ON
+        -DMBGL_WITH_QT=ON -DMBGL_WITH_WERROR=OFF  \
+        -DMBGL_WITH_QT_HEADLESS=OFF -DMBGL_WITH_QT_LIB_ONLY=ON \
+        -DCMAKE_SHARED_LINKER_FLAGS=-pthread
     make -C "${pkgname}/build" all
 }
 
