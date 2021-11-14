@@ -42,16 +42,19 @@ prepare() {
 }
 
 build() {
+  mkdir -p "${srcdir}/${pkgname}/build"
+  cd "${srcdir}/${pkgname}/build"
+
     cmake \
-        -B "${pkgname}/build" \
-        -S "${pkgname}" \
         -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
         -DMBGL_WITH_QT=ON -DMBGL_WITH_WERROR=OFF  \
         -DMBGL_WITH_QT_HEADLESS=OFF -DMBGL_WITH_QT_LIB_ONLY=ON \
-        -DCMAKE_SHARED_LINKER_FLAGS=-pthread
-    make -C "${pkgname}/build" all
+        -DCMAKE_SHARED_LINKER_FLAGS=-pthread \
+        ..
+    make
 }
 
 package() {
-    make -C "${srcdir}/${pkgname}/build" DESTDIR="$pkgdir" install
+    cd "${srcdir}/${pkgname}/build"
+    DESTDIR="$pkgdir" cmake --install .
 }
