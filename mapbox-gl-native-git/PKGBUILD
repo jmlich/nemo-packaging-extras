@@ -61,4 +61,6 @@ build() {
 
 package() {
     make -C "${srcdir}/${pkgname}/build" DESTDIR="$pkgdir" install
+    mkdir -p $pkgdir/usr/include/qt
+    mv $pkgdir/usr/include/qt5/* $pkgdir/usr/include/qt
 }
