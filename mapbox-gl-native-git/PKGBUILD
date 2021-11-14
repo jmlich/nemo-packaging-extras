@@ -1,9 +1,11 @@
 # $Id$
 
 _host="github.com"
+#_project=maplibre
+#_basename=maplibre-gl-native
 _project=mapbox
 _basename=mapbox-gl-native
-_branch=master
+#_branch=master
 
 _gittag=maps-v1.6.0
 _gitname=$_basename
@@ -23,8 +25,10 @@ provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 source=("${pkgname}::git+${url}"
     '0001-add-include.patch'
+    '0002-build-qt-Add-support-for-qmapboxgl-installation.patch'
+    '0003-build-qt-Add-support-for-using-qmapboxgl-as-a-proper.patch'
 )
-sha256sums=('SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${pkgname}"
@@ -37,8 +41,9 @@ pkgver() {
 prepare() {
     cd "$srcdir/${pkgname}"
     git submodule update --init --recursive
-
     patch -p1 --input="${srcdir}/0001-add-include.patch"
+    patch -p1 --input="${srcdir}/0002-build-qt-Add-support-for-qmapboxgl-installation.patch"
+    patch -p1 --input="${srcdir}/0003-build-qt-Add-support-for-using-qmapboxgl-as-a-proper.patch"
 }
 
 build() {
