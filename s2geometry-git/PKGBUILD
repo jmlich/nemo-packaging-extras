@@ -19,8 +19,10 @@ depends=('qt5-base' 'abseil-cpp' 'openssl' 'gtest')
 makedepends=('git' 'cmake')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
-source=("${pkgname}::git+${url}")
-sha256sums=('SKIP')
+source=("${pkgname}::git+${url}"
+    '0001-add-hash.h-include.patch'
+)
+sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${pkgname}"
@@ -28,6 +30,11 @@ pkgver() {
     git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
     printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
   ) 2>/dev/null
+}
+
+prepare() {
+    cd "$srcdir/${pkgname}"
+    patch -p1 --input="${srcdir}/0001-add-hash.h-include.patch"
 }
 
 build() {
