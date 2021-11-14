@@ -1,21 +1,21 @@
 # $Id$
 
 _host="github.com"
-_project=nemomobile-ux
-_basename=glacier-browser
+_project=rinigus
+_basename=pure-maps
 _branch=master
 
 _gitname=$_basename
 pkgname=$_basename-git
 
-pkgver=0.1.1.r5.g6a426ef
+pkgver=2.8.1.r49.g0ac71c81
 
 pkgrel=1
-pkgdesc="Nemo browser"
+pkgdesc="Pure Maps"
 arch=('x86_64' 'aarch64')
 url="https://$_host/$_project/$_gitname#branch=$_branch"
-license=('BSD-3-Clause' 'LGPL-2.1-only')
-depends=('pyotherside' 'python-pyxdg' 'mapbox-gl-native' 'mapbox-gl-qml-git' 'pyotherside-git' 's2geometry-git' 'nemo-qml-plugin-dbus')
+license=('GPL-3.0 License')
+depends=('pyotherside' 'python-pyxdg' 'mapbox-gl-native' 'mapbox-gl-qml-git' 'pyotherside-git' 's2geometry-git' 'nemo-qml-plugin-dbus' 'qt5-quickcontrols2')
 makedepends=('git' 'cmake' 'qt5-tools')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
@@ -30,11 +30,17 @@ pkgver() {
   ) 2>/dev/null
 }
 
+prepare() {
+    cd "$srcdir/${pkgname}"
+    git submodule update --init --recursive
+}
+
 build() {
     cmake \
         -B "${pkgname}/build" \
         -S "${pkgname}" \
-        -DCMAKE_INSTALL_PREFIX:PATH='/usr'
+        -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
+        -DFLAVOR=qtcontrols
     make -C "${pkgname}/build" all
 }
 
