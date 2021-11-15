@@ -3,26 +3,30 @@
 _host="github.com"
 _project=google
 _basename=s2geometry
-_branch=master
+#_branch=master
+_gittag=v0.9.0
 
 _gitname=$_basename
 pkgname=$_basename-git
 
-pkgver=v0.9.0.r40.g7f0dc0b
+pkgver=v0.9.0.r0.g4ad31e9
 
 pkgrel=1
 pkgdesc="S2 is primarily designed to work with spherical geometry,"
 arch=('x86_64' 'aarch64')
-url="https://$_host/$_project/$_gitname#branch=$_branch"
+#url="https://$_host/$_project/$_gitname#branch=$_branch"
+url="https://$_host/$_project/$_gitname#tag=${_gittag}"
 license=('Apache-2.0 License')
 depends=('qt5-base' 'abseil-cpp' 'openssl' 'gtest')
 makedepends=('git' 'cmake')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 source=("${pkgname}::git+${url}"
-    '0001-add-hash.h-include.patch'
+    'fix-uint-handling.patch'
+    'fix-newer-openssl.patch'
+    '0001-CMake-add-version-information-to-the-library.patch'
 )
-sha256sums=('SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${pkgname}"
@@ -34,7 +38,9 @@ pkgver() {
 
 prepare() {
     cd "$srcdir/${pkgname}"
-    patch -p1 --input="${srcdir}/0001-add-hash.h-include.patch"
+    patch -p1 --input="${srcdir}/fix-uint-handling.patch"
+    patch -p1 --input="${srcdir}/fix-newer-openssl.patch"
+    patch -p1 --input="${srcdir}/0001-CMake-add-version-information-to-the-library.patch"
 }
 
 build() {
@@ -42,8 +48,10 @@ build() {
         -B "${pkgname}/build" \
         -S "${pkgname}" \
         -DCMAKE_INSTALL_PREFIX:PATH='/usr' \
-        -DCMAKE_VERBOSE_MAKEFILE=ON -DBUILD_PYTHON=OFF -DBUILD_TESTING=OFF \
-        -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF
+        -DCMAKE_BUILD_TYPE=None \
+        -DBUILD_SHARED_LIBS=ON \
+        -DBUILD_EXAMPLES=OFF \
+        -DCMAKE_VERBOSE_MAKEFILE=ON
     make -C "${pkgname}/build" all
 }
 
