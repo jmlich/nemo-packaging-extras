@@ -6,7 +6,7 @@ pkgrel=1
 pkgdesc="PinePhone Compass "
 arch=('x86_64' 'aarch64')
 url="https://gitlab.com/lgtrombetta/pinephone-compass"
-license=('BSD-3-Clause')
+license=('GNU GPL 3')
 depends=('python-numpy'
     'python-matplotlib'
     'python-pandas'
