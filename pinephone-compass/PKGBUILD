@@ -1,0 +1,30 @@
+# $Id$
+
+pkgname=pinephone-compass
+pkgver=0.3.1
+pkgrel=1
+pkgdesc="PinePhone Compass "
+arch=('x86_64' 'aarch64')
+url="https://gitlab.com/lgtrombetta/pinephone-compass"
+license=('BSD-3-Clause')
+depends=('python-numpy'
+    'python-matplotlib'
+    'python-pandas'
+    'python-gobject'
+    'python'
+    'libhandy'
+    'python-cairo'
+    )
+
+makedepends=('meson' 'pkgconf')
+source=("${url}/-/archive/v${pkgver}/${pkgname}-v${pkgver}.tar.gz")
+sha256sums=('a7f9185590e0e82f665b83e4393a96bfaa637b53127b12ce712ebf0d9abc69b5')
+
+build() {
+    meson --prefix=/usr --buildtype=plain ${pkgname}-v${pkgver}  build
+    meson compile -C build
+}
+
+package() {
+    meson install -C build --destdir "$pkgdir"
+}
