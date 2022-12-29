@@ -1,5 +1,5 @@
 pkgname=modrana-git
-pkgver=r3212.c929028e
+pkgver=r3227.ad877ca5
 pkgrel=1
 pkgdesc="ModRana is a flexible GPS navigation software for (not only) mobile Linux devices."
 arch=('i686' 'x86_64' 'aarch64')
