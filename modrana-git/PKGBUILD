@@ -1,0 +1,40 @@
+pkgname=modrana-git
+pkgver=r3212.c929028e
+pkgrel=1
+pkgdesc="ModRana is a flexible GPS navigation software for (not only) mobile Linux devices."
+arch=('i686' 'x86_64' 'aarch64')
+url="https://github.com/M4rtinK/modrana"
+license=('GPL3')
+depends=('python-pyotherside' 'qt5-sensors' 'qt5-location' 'qt5-quickcontrols2' 'qt5-svg')
+makedepends=('git' 'qconf' 'patch' 'rsync')
+provides=('modrana')
+conflicts=('modrana')
+pkgstem=${pkgname%-git}
+source=("git+${url}.git" "fix_Makefile.patch")
+
+sha256sums=('SKIP' 'd77016f96bbcb068afc78cb27f387e2c31d7f9be4d994acb98ca392d3aaf7c40')
+
+pkgver() {
+    cd "${pkgname%-git}"
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+    	cd "$srcdir/$pkgstem"
+    	patch -p1 -i "$srcdir/fix_Makefile.patch"
+}
+
+build() {
+	cd "${pkgname%-git}"
+        echo "${pkgver}" >> version.txt
+	make
+	make rsync
+	make bytecode-python2
+	make bytecode-python3
+	make launcher
+}
+
+package() {
+	cd "${pkgname%-git}"
+	make DESTDIR="$pkgdir/" install
+}
