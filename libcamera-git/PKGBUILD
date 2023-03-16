@@ -1,6 +1,6 @@
 pkgname=libcamera-git
 _pkgname=libcamera
-pkgver=v0.0.3.r10.g0a8ac1ee
+pkgver=v0.0.0.r4200.g85befa81
 pkgrel=1
 pkgdesc='A complex camera support library for Linux, Android, and ChromeOS'
 arch=('x86_64' 'i686')
@@ -36,7 +36,7 @@ optdepends=(
 license=('LGPL2.1')
 options=('!buildflags')
 #source=('git://linuxtv.org/libcamera.git/')
-source=('git://gitlab.com/tui/libcamera.git/')
+source=("${_pkgname}::git+https://gitlab.com/tui/libcamera.git")
 md5sums=('SKIP')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
