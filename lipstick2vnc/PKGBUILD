@@ -1,0 +1,21 @@
+pkgname=lipstick2vnc
+pkgver=0.10.0
+pkgrel=1
+pkgdesc="VNC server grabbing frames from lipstick wayland composer"
+arch=('x86_64' 'aarch64')
+url="https://github.com/mer-qa/lipstick2vnc"
+license=('GPL-2.0')
+depends=('qt5-base' 'libvncserver')
+source=("${url}/archive/refs/tags/$pkgver.tar.gz")
+sha256sums=('d2104e0d9f7f835b70c379bcb8c0b6431c7d222c11ef68953a9329c0c5e890cc')
+
+build() {
+    cd $pkgname-$pkgver
+    qmake
+    make
+}
+
+package() {
+    cd $pkgname-$pkgver
+    make -j 1 INSTALL_ROOT="$pkgdir/" install
+}

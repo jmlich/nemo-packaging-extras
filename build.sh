@@ -2,10 +2,11 @@
 
 declare -a pkg_list=(
     'libcamera-git'
-#    'maliit-framework'
-#    'pinephone-compass'
-#    'yavta'
+    'maliit-framework'
+    'pinephone-compass'
+    'yavta'
     'modrana-git'
+    'lipstick2vnc'
 )
 
 
