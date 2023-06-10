@@ -1,0 +1,36 @@
+# Chupligin Sergey (NeoChapay) <neochapay@gmail.com>
+
+pkgname=QMI-git
+pkgver=r115.4b40c83
+pkgrel=1
+pkgdesc="QMI"
+arch=('x86_64' 'aarch64')
+url="https://github.com/jmlich/QtDigitalInstrumentCluster"
+license=('BSD-3-Clause')
+depends=('qt5-serialport' 'qt5-declarative')
+
+makedepends=('git' 'qt5-tools')
+provides=("${pkgname%-git}")
+conflicts=("${pkgname%-git}")
+source=("${pkgname}::git+${url}")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "${srcdir}/${pkgname}"
+  ( set -o pipefail
+    git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g' ||
+    printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  ) 2>/dev/null
+}
+
+build() {
+    cmake \
+        -B "${pkgname}/build" \
+        -S "${pkgname}" \
+        -DCMAKE_INSTALL_PREFIX:PATH='/usr'
+    make -C "${pkgname}/build" all
+}
+
+package() {
+    make -C "${srcdir}/${pkgname}/build" DESTDIR="$pkgdir" install
+}
