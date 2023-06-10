@@ -9,7 +9,7 @@ url="https://github.com/jmlich/QtDigitalInstrumentCluster"
 license=('BSD-3-Clause')
 depends=('qt5-serialport' 'qt5-declarative')
 
-makedepends=('git' 'qt5-tools')
+makedepends=('git' 'qt5-tools' 'cmake')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
 source=("${pkgname}::git+${url}")
