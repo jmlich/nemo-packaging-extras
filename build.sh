@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -a pkg_list=(
-    'QMI-git'
+    'DIC-git'
 #    'libcamera-git'
 #    'maliit-framework'
 #    'pinephone-compass'

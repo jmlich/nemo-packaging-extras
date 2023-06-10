@@ -1,9 +1,7 @@
-# Chupligin Sergey (NeoChapay) <neochapay@gmail.com>
-
-pkgname=QMI-git
+pkgname=DIC-git
 pkgver=r115.4b40c83
 pkgrel=1
-pkgdesc="QMI"
+pkgdesc="DIC"
 arch=('x86_64' 'aarch64')
 url="https://github.com/jmlich/QtDigitalInstrumentCluster"
 license=('BSD-3-Clause')
